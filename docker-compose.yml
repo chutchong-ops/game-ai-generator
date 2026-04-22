@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama-service
+    restart: always
+    networks:
+      - game-ai-network
+    healthcheck:
+      test: [ 'CMD', 'curl', '-f', 'http://localhost:8080/health' ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  fastapi:
+    build:
+      context: ./backend
+    container_name: fastapi-service
+    restart: always
+    networks:
+      - game-ai-network
+    healthcheck:
+      test: [ 'CMD', 'curl', '-f', 'http://localhost:8000/health' ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  react:
+    build:
+      context: ./frontend
+    container_name: react-service
+    restart: always
+    networks:
+      - game-ai-network
+    healthcheck:
+      test: [ 'CMD', 'curl', '-f', 'http://localhost:3000/health' ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  game-ai-network:
+    driver: bridge
