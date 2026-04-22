@@ -1,0 +1,6 @@
+fastapi
+uvicorn
+langchain
+ollama
+pillow
+python-multipart
